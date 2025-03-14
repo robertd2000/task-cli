@@ -43,7 +43,16 @@ func GetTasks() []models.Task {
 func CreateTask(description string) (models.Task) {
 	task := models.Task{Id: ai.ID(), Description: description, Status: "todo", CreatedAt: time.Now(), UpdatedAt: time.Now()}
 
+	tasks := GetTasks()
+	tasks = append(tasks, task)
 
+	s, err := SerializeToJSON(tasks)
+
+	if err != nil {
+		fmt.Printf("unable to serialize task: %w", err)
+	}
+
+	SaveToJSON("db.json", s)
 
 	return task
 }
