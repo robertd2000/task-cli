@@ -40,7 +40,7 @@ func main() {
 		fmt.Printf("unable to read from json: %w", err)
 	}
 
-	t, err := service.DeserializeTask(stream)
+	t, err := service.DeserializeFromJSON[models.Task](stream)
 
 	if err != nil {
 		fmt.Printf("unable to deserialize task: %w", err)
@@ -48,7 +48,7 @@ func main() {
 
 	fmt.Println(t)
 
-	t.Status = "done"
+	t.Status = "done2"
 
 	s, err = service.SerializeToJSON(t)
 

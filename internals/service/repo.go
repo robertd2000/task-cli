@@ -3,8 +3,6 @@ package service
 import (
 	"encoding/json"
 	"os"
-
-	"github.com/robertd2000/task-cli/internals/models"
 )
 
 func SerializeToJSON[T any](data T) ([]byte, error) {
@@ -37,12 +35,12 @@ func ReadFromJSON() ([]byte, error) {
 	return res, nil
 }
 
-func DeserializeTask(stream []byte) (*models.Task, error) {
-	task := &models.Task{}
+func DeserializeFromJSON[T any](data []byte) (T, error) {
+	var result T
 
-	if err := json.Unmarshal(stream, task); err != nil {
-		return nil, err
-    }
+	if err := json.Unmarshal(data, &result); err != nil {
+		return result, err
+	}
 
-	return task, nil
+	return result, nil
 }
