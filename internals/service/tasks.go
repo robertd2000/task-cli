@@ -56,3 +56,22 @@ func CreateTask(description string) (models.Task) {
 
 	return task
 }
+
+func UpdateTask(id int, description string) (models.Task) {
+	tasks := GetTasks()
+
+	task := &tasks[id]
+
+	task.Description = description
+	task.UpdatedAt = time.Now()
+
+	s, err := SerializeToJSON(tasks)
+
+	if err != nil {
+		fmt.Printf("unable to serialize task: %w", err)
+	}
+
+	SaveToJSON("db.json", s)
+
+	return *task
+}
