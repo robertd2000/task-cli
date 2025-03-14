@@ -23,10 +23,16 @@ func GetTasks() []models.Task {
 	return tasks
 }
 
-func GetTask(id int) (models.Task) {
+func GetTask(id int) (*models.Task) {
 	tasks := GetTasks()
 
-	return tasks[id]
+	for _, task := range tasks {
+		if task.Id == id {
+			return &task
+		}
+	}
+
+	return nil
 }
 
 func CreateTask(description string) (models.Task) {
@@ -67,13 +73,18 @@ func UpdateTask(id int, description string) (models.Task) {
 	return *task
 }
 
-func DeleteTask(id int) (models.Task) {
+func DeleteTask(taskId int) (models.Task) {
 	tasks := GetTasks()
 
-	task := &tasks[id]
+	task := GetTask(taskId)
+	id := task.Id
 
-	tasks = append(tasks[:id], tasks[id+1:]...)
-
+	for i, task := range tasks {
+		if task.Id == id {
+			tasks = append(tasks[:i], tasks[i+1:]...)
+		}
+	}
+	
 	s, err := SerializeToJSON(tasks)
 
 	if err != nil {
