@@ -3,9 +3,9 @@ package models
 import "time"
 
 type Task struct {
-	Id          int
-	Description string
-	Status      string
-	CreatedAt   time.Time
-	UpdatedAt  	time.Time
+	Id          int 		`json:"id"`
+	Description string  	`json:"description"`
+	Status      string  	`json:"status"`
+	CreatedAt   time.Time 	`json:"createdAt"`
+	UpdatedAt  	time.Time 	`json:"updatedAt"`
 }
