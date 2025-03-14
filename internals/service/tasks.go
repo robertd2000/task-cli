@@ -49,13 +49,7 @@ func CreateTask(description string) (models.Task) {
 	task := newTask(description)
 	tasks = append(tasks, task)
 
-	s, err := SerializeToJSON(tasks)
-
-	if err != nil {
-		fmt.Printf("unable to serialize task: %v", err)
-	}
-
-	SaveToJSON("db.json", s)
+	commit(tasks)
 
 	return task
 }
@@ -68,13 +62,7 @@ func UpdateTask(id int, description string) (models.Task) {
 	task.Description = description
 	task.UpdatedAt = time.Now()
 
-	s, err := SerializeToJSON(tasks)
-
-	if err != nil {
-		fmt.Printf("unable to serialize task: %v", err)
-	}
-
-	SaveToJSON("db.json", s)
+	commit(tasks)
 
 	return *task
 }
@@ -91,6 +79,12 @@ func DeleteTask(taskId int) (models.Task) {
 		}
 	}
 	
+	commit(tasks)
+
+	return *task
+}
+
+func commit(tasks []models.Task) {
 	s, err := SerializeToJSON(tasks)
 
 	if err != nil {
@@ -98,6 +92,4 @@ func DeleteTask(taskId int) (models.Task) {
 	}
 
 	SaveToJSON("db.json", s)
-
-	return *task
 }
