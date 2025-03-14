@@ -15,7 +15,7 @@ func SerializeTask(task *models.Task) ([]byte, error) {
 		fmt.Printf("unable to marshal task: %w", err)
 		return nil, err
 	}
-	
+
 	return res, nil
 }
 
@@ -24,6 +24,7 @@ func SaveToJSON(task []byte) error {
 
 	if err != nil {
 		fmt.Printf("unable to write file: %w", err)
+		return err
 	}
 
 	return nil
