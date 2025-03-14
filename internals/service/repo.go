@@ -29,3 +29,14 @@ func SaveToJSON(task []byte) error {
 
 	return nil
 }
+
+func ReadFromJSON() ([]byte, error) {
+	res, err := os.ReadFile("db.json")	
+
+	if err != nil {
+		fmt.Printf("unable to read file: %w", err)
+		return nil, err
+	}
+
+	return res, nil
+}
