@@ -7,8 +7,8 @@ import (
 	"github.com/robertd2000/task-cli/internals/models"
 )
 
-func SerializeTask(task *models.Task) ([]byte, error) {
-	res, err := json.Marshal(task)
+func SerializeToJSON[T any](data T) ([]byte, error) {
+	res, err := json.Marshal(data)
 
 	if err != nil {
 		return nil, err

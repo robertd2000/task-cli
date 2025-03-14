@@ -22,7 +22,7 @@ func main() {
 		UpdatedAt:   time.Now(),
 	}
 	
-	s, err := service.SerializeTask(task)
+	s, err := service.SerializeToJSON(task)
 
 	if err != nil {
 		fmt.Printf("unable to serialize task: %w", err)
@@ -50,7 +50,7 @@ func main() {
 
 	t.Status = "done"
 
-	s, err = service.SerializeTask(t)
+	s, err = service.SerializeToJSON(t)
 
 	if err != nil {
 		fmt.Printf("unable to serialize task: %w", err)
