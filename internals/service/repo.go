@@ -15,8 +15,8 @@ func SerializeToJSON[T any](data T) ([]byte, error) {
 	return res, nil
 }
 
-func SaveToJSON(task []byte) error {
-	err := os.WriteFile("db.json" ,task ,0755)
+func SaveToJSON(filename string, task []byte) error {
+	err := os.WriteFile(filename ,task ,0755)
 
 	if err != nil {
 		return err

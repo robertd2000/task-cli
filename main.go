@@ -28,7 +28,7 @@ func main() {
 		fmt.Printf("unable to serialize task: %w", err)
 	}
 
-	err = service.SaveToJSON(s)
+	err = service.SaveToJSON("db.json", s)
 
 	if err != nil {
 		fmt.Printf("unable to save to json: %w", err)
