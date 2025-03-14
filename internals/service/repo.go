@@ -40,3 +40,13 @@ func ReadFromJSON() ([]byte, error) {
 
 	return res, nil
 }
+
+func DeserializeTask(stream []byte) (*models.Task, error) {
+	task := &models.Task{}
+	
+	if err := json.Unmarshal(stream, task); err != nil {
+		return nil, err
+    }
+
+	return task, nil
+}
