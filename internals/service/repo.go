@@ -44,3 +44,4 @@ func DeserializeFromJSON[T any](data []byte) (T, error) {
 
 	return result, nil
 }
+
