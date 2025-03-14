@@ -21,8 +21,10 @@ func main() {
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
 	}
+
+	tasks := []models.Task{*task}
 	
-	s, err := service.SerializeToJSON(task)
+	s, err := service.SerializeToJSON(tasks)
 
 	if err != nil {
 		fmt.Printf("unable to serialize task: %w", err)
@@ -40,7 +42,7 @@ func main() {
 		fmt.Printf("unable to read from json: %w", err)
 	}
 
-	t, err := service.DeserializeFromJSON[models.Task](stream)
+	t, err := service.DeserializeFromJSON[[]models.Task](stream)
 
 	if err != nil {
 		fmt.Printf("unable to deserialize task: %w", err)
@@ -48,9 +50,17 @@ func main() {
 
 	fmt.Println(t)
 
-	t.Status = "done2"
+	t2 := &models.Task{
+		Id:          2,
+		Description: "ccc",
+		Status:      "todo",
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
+	}
 
-	s, err = service.SerializeToJSON(t)
+	tasks = append(tasks, *t2)
+
+	s, err = service.SerializeToJSON(tasks)
 
 	if err != nil {
 		fmt.Printf("unable to serialize task: %w", err)
