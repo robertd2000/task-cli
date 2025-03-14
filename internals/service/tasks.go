@@ -40,6 +40,12 @@ func GetTasks() []models.Task {
 	return tasks
 }
 
+func GetTask(id int) (models.Task) {
+	tasks := GetTasks()
+
+	return tasks[id]
+}
+
 func CreateTask(description string) (models.Task) {
 	task := models.Task{Id: ai.ID(), Description: description, Status: "todo", CreatedAt: time.Now(), UpdatedAt: time.Now()}
 
