@@ -25,8 +25,8 @@ func SaveToJSON(filename string, task []byte) error {
 	return nil
 }
 
-func ReadFromJSON() ([]byte, error) {
-	res, err := os.ReadFile("db.json")	
+func ReadFromJSON(filename string) ([]byte, error) {
+	res, err := os.ReadFile(filename)	
 
 	if err != nil {
 		return nil, err

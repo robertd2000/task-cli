@@ -34,7 +34,7 @@ func main() {
 		fmt.Printf("unable to save to json: %w", err)
 	}
 
-	stream, err := service.ReadFromJSON()
+	stream, err := service.ReadFromJSON("db.json")
 
 	if err != nil {
 		fmt.Printf("unable to read from json: %w", err)
@@ -56,5 +56,5 @@ func main() {
 		fmt.Printf("unable to serialize task: %w", err)
 	}
 
-	err = service.SaveToJSON(s)
+	service.SaveToJSON("db.json", s)
 }
