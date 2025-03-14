@@ -11,13 +11,13 @@ func GetTasks() []models.Task {
 	stream, err := ReadFromJSON("db.json")
 
 	if err != nil {
-		fmt.Printf("unable to read from json: %w", err)
+		fmt.Printf("unable to read from json: %v", err)
 	}
 
 	tasks, err := DeserializeFromJSON[[]models.Task](stream)
 
 	if err != nil {
-		fmt.Printf("unable to deserialize task: %w", err)
+		fmt.Printf("unable to deserialize task: %v", err)
 	}
 
 	return tasks
@@ -35,18 +35,24 @@ func GetTask(id int) (*models.Task) {
 	return nil
 }
 
-func CreateTask(description string) (models.Task) {
-
+func newTask(description string) (models.Task) {
 	tasks := GetTasks()
 	prevTask := tasks[len(tasks)-1]
 	id := prevTask.Id + 1
 	task := models.Task{Id: id, Description: description, Status: "todo", CreatedAt: time.Now(), UpdatedAt: time.Now()}
+
+	return task
+}
+
+func CreateTask(description string) (models.Task) {
+	tasks := GetTasks()
+	task := newTask(description)
 	tasks = append(tasks, task)
 
 	s, err := SerializeToJSON(tasks)
 
 	if err != nil {
-		fmt.Printf("unable to serialize task: %w", err)
+		fmt.Printf("unable to serialize task: %v", err)
 	}
 
 	SaveToJSON("db.json", s)
@@ -57,7 +63,7 @@ func CreateTask(description string) (models.Task) {
 func UpdateTask(id int, description string) (models.Task) {
 	tasks := GetTasks()
 
-	task := &tasks[id]
+	task := GetTask(id)
 
 	task.Description = description
 	task.UpdatedAt = time.Now()
@@ -65,7 +71,7 @@ func UpdateTask(id int, description string) (models.Task) {
 	s, err := SerializeToJSON(tasks)
 
 	if err != nil {
-		fmt.Printf("unable to serialize task: %w", err)
+		fmt.Printf("unable to serialize task: %v", err)
 	}
 
 	SaveToJSON("db.json", s)
@@ -88,7 +94,7 @@ func DeleteTask(taskId int) (models.Task) {
 	s, err := SerializeToJSON(tasks)
 
 	if err != nil {
-		fmt.Printf("unable to serialize task: %w", err)
+		fmt.Printf("unable to serialize task: %v", err)
 	}
 
 	SaveToJSON("db.json", s)
