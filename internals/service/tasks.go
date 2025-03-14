@@ -54,21 +54,32 @@ func CreateTask(description string) (models.Task) {
 	return task
 }
 
-func UpdateTask(id int, description string) (models.Task) {
+func UpdateTask(id int, description string) (models.Task, error) {
 	tasks := GetTasks()
 
-	task := GetTask(id)
+	if tasks == nil {
+		return models.Task{}, fmt.Errorf("no tasks found")
+	}
 
+	var task *models.Task
 	for i := range tasks {
 		if tasks[i].Id == id {
 			tasks[i].Description = description
 			tasks[i].UpdatedAt = time.Now()
+			task = &tasks[i]
+			break
 		}
 	}
 
-	commit(tasks)
+	if task == nil {
+		return models.Task{}, fmt.Errorf("task with id %d not found", id)
+	}
 
-	return *task
+	if err := commit(tasks); err != nil {
+		return models.Task{}, fmt.Errorf("failed to commit changes: %v", err)
+	}
+
+	return *task, nil
 }
 
 func DeleteTask(taskId int) (models.Task) {
@@ -88,12 +99,15 @@ func DeleteTask(taskId int) (models.Task) {
 	return *task
 }
 
-func commit(tasks []models.Task) {
+func commit(tasks []models.Task) error {
 	s, err := SerializeToJSON(tasks)
-
 	if err != nil {
-		fmt.Printf("unable to serialize task: %v", err)
+		return fmt.Errorf("unable to serialize task: %w", err)
 	}
 
-	SaveToJSON("db.json", s)
+	if err := SaveToJSON("db.json", s); err != nil {
+		return fmt.Errorf("unable to save to JSON: %w", err)
+	}
+
+	return nil
 }

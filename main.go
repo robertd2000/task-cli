@@ -28,7 +28,7 @@ func main() {
 
 	// service.CreateTask("test 45")
 
-	service.UpdateTask(0, "test 0")
+	service.UpdateTask(0, "test")
 
 	// service.DeleteTask(4)
 }
