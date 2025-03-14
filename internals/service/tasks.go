@@ -26,9 +26,9 @@ func GetTasks() []models.Task {
 func GetTask(id int) (*models.Task) {
 	tasks := GetTasks()
 
-	for _, task := range tasks {
-		if task.Id == id {
-			return &task
+	for i := range tasks {
+		if tasks[i].Id == id {
+			return &tasks[i]
 		}
 	}
 
@@ -59,8 +59,12 @@ func UpdateTask(id int, description string) (models.Task) {
 
 	task := GetTask(id)
 
-	task.Description = description
-	task.UpdatedAt = time.Now()
+	for i := range tasks {
+		if tasks[i].Id == id {
+			tasks[i].Description = description
+			tasks[i].UpdatedAt = time.Now()
+		}
+	}
 
 	commit(tasks)
 

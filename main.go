@@ -26,7 +26,7 @@ func main() {
 	// 	fmt.Printf("%+v\n", task)
 	// }
 
-	// service.CreateTask("test 42")
+	// service.CreateTask("test 45")
 
 	service.UpdateTask(0, "test 0")
 

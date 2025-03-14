@@ -6,7 +6,7 @@ import (
 )
 
 func SerializeToJSON[T any](data T) ([]byte, error) {
-	res, err := json.Marshal(data)
+	res, err := json.MarshalIndent(data, "", "  ")
 
 	if err != nil {
 		return nil, err
