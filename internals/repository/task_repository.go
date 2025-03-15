@@ -8,7 +8,7 @@ import (
 	"github.com/robertd2000/task-cli/internals/utils"
 )
 
-type ITaskRepository interface {
+type TaskRepository interface {
 	GetTasks() ([]models.Task, error)
 	GetTask(id int) (*models.Task, error)
 	CreateTask(description string) (*models.Task, error)
@@ -16,40 +16,49 @@ type ITaskRepository interface {
 	DeleteTask(id int) (models.Task, error)
 }
 
-type TaskRepository struct {
+type taskRepository struct {
 	sourceFile string
 }
+func NewTaskRepository(sourceFile string) TaskRepository {
+	return &taskRepository{sourceFile: sourceFile}
+}
 
-func (r *TaskRepository) GetTasks() []models.Task {
+func (r *taskRepository) GetTasks() ([]models.Task, error) {
 	stream, err := utils.ReadFromJSON(r.sourceFile)
 
 	if err != nil {
-		fmt.Printf("unable to read from json: %v", err)
+		return nil, err
 	}
 
 	tasks, err := utils.DeserializeFromJSON[[]models.Task](stream)
 
 	if err != nil {
-		fmt.Printf("unable to deserialize task: %v", err)
+		return nil, err
 	}
 
-	return tasks
+	return tasks, nil
 }
 
-func (r *TaskRepository) GetTask(id int) (*models.Task) {
-	tasks := r.GetTasks()
-
+func (r *taskRepository) GetTask(id int) (*models.Task, error) {
+	tasks, err := r.GetTasks()
+	if err != nil {
+		return nil, err
+	}
+	
 	for i := range tasks {
 		if tasks[i].Id == id {
-			return &tasks[i]
+			return &tasks[i], nil
 		}
 	}
 
-	return nil
+	return nil, fmt.Errorf("task with id %d not found", id)
 }
 
-func (r *TaskRepository) newTask(description string) (models.Task) {
-	tasks := r.GetTasks()
+func (r *taskRepository) newTask(description string) (models.Task) {
+	tasks, err := r.GetTasks()
+	if err != nil {
+		return models.Task{}
+	}
 	prevTask := tasks[len(tasks)-1]
 	id := prevTask.Id + 1
 	task := models.Task{Id: id, Description: description, Status: "todo", CreatedAt: time.Now(), UpdatedAt: time.Now()}
@@ -57,9 +66,11 @@ func (r *TaskRepository) newTask(description string) (models.Task) {
 	return task
 }
 
-func (r *TaskRepository) CreateTask(description string) (*models.Task, error) {
-	fmt.Println(description)
-	tasks := r.GetTasks()
+func (r *taskRepository) CreateTask(description string) (*models.Task, error) {
+	tasks, err := r.GetTasks()
+	if err != nil {
+		return nil, err
+	}
 	task := r.newTask(description)
 	tasks = append(tasks, task)
 
@@ -68,8 +79,11 @@ func (r *TaskRepository) CreateTask(description string) (*models.Task, error) {
 	return &task, nil
 }
 
-func (r *TaskRepository) UpdateTask(id int, description string) (models.Task, error) {
-	tasks := r.GetTasks()
+func (r *taskRepository) UpdateTask(id int, description string) (models.Task, error) {
+	tasks, err := r.GetTasks()
+	if err != nil {
+		return models.Task{}, err
+	}
 
 	if tasks == nil {
 		return models.Task{}, fmt.Errorf("no tasks found")
@@ -96,10 +110,17 @@ func (r *TaskRepository) UpdateTask(id int, description string) (models.Task, er
 	return *task, nil
 }
 
-func (r *TaskRepository) DeleteTask(taskId int) (models.Task) {
-	tasks := r.GetTasks()
+func (r *taskRepository) DeleteTask(taskId int) (models.Task, error) {
+	tasks, err := r.GetTasks()
+	if err != nil {
+		return models.Task{}, err
+	}
 
-	task := r.GetTask(taskId)
+	task, err := r.GetTask(taskId)
+	if err != nil {
+		return models.Task{}, err
+	}
+	
 	id := task.Id
 
 	for i, task := range tasks {
@@ -110,10 +131,10 @@ func (r *TaskRepository) DeleteTask(taskId int) (models.Task) {
 	
 	r.commit(tasks)
 
-	return *task
+	return *task, nil
 }
 
-func (r *TaskRepository) commit(tasks []models.Task) error {
+func (r *taskRepository) commit(tasks []models.Task) error {
 	s, err := utils.SerializeToJSON(tasks)
 	if err != nil {
 		return fmt.Errorf("unable to serialize task: %w", err)
