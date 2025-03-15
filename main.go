@@ -3,8 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-
-	"github.com/robertd2000/task-cli/internals/service"
 )
 
 func main() {
@@ -28,7 +26,7 @@ func main() {
 
 	// service.CreateTask("test 45")
 
-	service.UpdateTask(0, "test")
+	// service.UpdateTask(0, "test")
 
 	// service.DeleteTask(4)
 }
