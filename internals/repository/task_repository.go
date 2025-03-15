@@ -70,8 +70,7 @@ func (r *taskRepository) newTask(description string) (models.Task) {
 func (r *taskRepository) CreateTask(description string) (*models.Task, error) {
 	tasks, err := r.GetTasks()
 	if err != nil {
-		fmt.Println(err)
-		return nil, err
+		return nil, fmt.Errorf("unable to get tasks: %w", err)
 	}
 	task := r.newTask(description)
 	tasks = append(tasks, task)
@@ -84,8 +83,7 @@ func (r *taskRepository) CreateTask(description string) (*models.Task, error) {
 func (r *taskRepository) UpdateTask(id int, description string) (models.Task, error) {
 	tasks, err := r.GetTasks()
 	if err != nil {
-		fmt.Println(err)
-		return models.Task{}, err
+		return models.Task{}, fmt.Errorf("unable to get tasks: %w", err)
 	}
 
 	if tasks == nil {
