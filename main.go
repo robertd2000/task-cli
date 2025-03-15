@@ -31,6 +31,8 @@ func main() {
 		description := args[1]
 
 		taskService.CreateTask(description)
+
+		fmt.Println("Task created")
 	case "update":
 		if len(args) < 2 {
 			fmt.Println("No id provided")
