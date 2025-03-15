@@ -49,6 +49,8 @@ func main() {
 		}
 		
 		taskService.UpdateTask(id,  &models.Task{Description: description})
+
+		fmt.Printf("Task with id %d updated\n", id)
 	case "delete":
 		if len(args) < 2 {
 			log.Fatal("No id provided")
