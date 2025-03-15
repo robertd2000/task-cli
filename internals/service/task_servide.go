@@ -26,5 +26,5 @@ func (s *TaskService) UpdateTask(id int, description string) (models.Task, error
 }
 
 func (s *TaskService) DeleteTask(id int) (models.Task, error) {
-	return s.DeleteTask(id)
+	return s.repository.DeleteTask(id)
 }
