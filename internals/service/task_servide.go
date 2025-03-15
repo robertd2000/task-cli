@@ -8,6 +8,23 @@ import (
 type TaskService struct {
 	repository repository.ITaskRepository
 }
-func (s *TaskService) GetTask(id int) *models.Task {
-	return s.GetTask(id)
+
+func (s *TaskService) GetTask(id int) (*models.Task, error) {
+	return s.repository.GetTask(id)
+}
+
+func (s *TaskService) GetTasks() ([]models.Task, error) {
+	return s.repository.GetTasks()
+}
+
+func (s *TaskService) CreateTask(description string) models.Task {
+	return s.CreateTask(description)
+}
+
+func (s *TaskService) UpdateTask(id int, description string) (models.Task, error) {
+	return s.UpdateTask(id, description)
+}
+
+func (s *TaskService) DeleteTask(id int) (models.Task, error) {
+	return s.DeleteTask(id)
 }
