@@ -14,7 +14,7 @@ type TaskService interface {
 }
 
 type taskService struct {
-	repository repository.ITaskRepository
+	repository repository.TaskRepository
 }
 
 func NewTaskService(repository repository.TaskRepository) TaskService {
