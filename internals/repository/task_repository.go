@@ -42,7 +42,7 @@ func (r *taskRepository) GetTasks() ([]models.Task, error) {
 func (r *taskRepository) GetTask(id int) (*models.Task, error) {
 	tasks, err := r.GetTasks()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("unable to get tasks: %w", err)
 	}
 
 	for i := range tasks {
