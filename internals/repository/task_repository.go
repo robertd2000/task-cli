@@ -10,6 +10,7 @@ import (
 
 type ITaskRepository interface {
 	GetTasks() ([]models.Task, error)
+	GetTask(id int) (*models.Task, error)
 	CreateTask(description string) (models.Task, error)
 	UpdateTask(id int, description string) (models.Task, error)
 	DeleteTask(id int) (models.Task, error)
