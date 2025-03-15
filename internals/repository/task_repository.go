@@ -27,15 +27,13 @@ func (r *taskRepository) GetTasks() ([]models.Task, error) {
 	stream, err := utils.ReadFromJSON(r.sourceFile)
 
 	if err != nil {
-		fmt.Println(err)
-		return nil, err
+		return []models.Task{}, err
 	}
 
 	tasks, err := utils.DeserializeFromJSON[[]models.Task](stream)
 
 	if err != nil {
-		fmt.Println(err)
-		return nil, err
+		return nil, fmt.Errorf("unable to deserialize tasks: %w", err)
 	}
 
 	return tasks, nil
