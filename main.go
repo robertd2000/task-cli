@@ -106,6 +106,8 @@ func main() {
 		}
 		
 		taskService.UpdateTask(id,  &models.Task{Status: "in-progress"})
+
+		fmt.Printf("Task with id %d updated\n", id)
 	case "mark-done":
 		if len(args) < 2 {
 			fmt.Println("No id provided")
@@ -119,6 +121,8 @@ func main() {
 		}
 		
 		taskService.UpdateTask(id,  &models.Task{Status: "done"})
+		
+		fmt.Printf("Task with id %d updated\n", id)
 	default:
 		fmt.Println("Invalid operation")
 		return
