@@ -11,7 +11,7 @@ import (
 type ITaskRepository interface {
 	GetTasks() ([]models.Task, error)
 	GetTask(id int) (*models.Task, error)
-	CreateTask(description string) (models.Task, error)
+	CreateTask(description string) (*models.Task, error)
 	UpdateTask(id int, description string) (models.Task, error)
 	DeleteTask(id int) (models.Task, error)
 }
@@ -57,14 +57,14 @@ func (r *TaskRepository) newTask(description string) (models.Task) {
 	return task
 }
 
-func (r *TaskRepository) CreateTask(description string) (models.Task) {
+func (r *TaskRepository) CreateTask(description string) (*models.Task) {
 	tasks := r.GetTasks()
 	task := r.newTask(description)
 	tasks = append(tasks, task)
 
 	r.commit(tasks)
 
-	return task
+	return &task
 }
 
 func (r *TaskRepository) UpdateTask(id int, description string) (models.Task, error) {

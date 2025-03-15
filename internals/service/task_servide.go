@@ -17,8 +17,8 @@ func (s *TaskService) GetTasks() ([]models.Task, error) {
 	return s.repository.GetTasks()
 }
 
-func (s *TaskService) CreateTask(description string) models.Task {
-	return s.CreateTask(description)
+func (s *TaskService) CreateTask(description string) (*models.Task, error){
+	return s.repository.CreateTask(description)
 }
 
 func (s *TaskService) UpdateTask(id int, description string) (models.Task, error) {
