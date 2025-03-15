@@ -114,14 +114,13 @@ func (r *taskRepository) UpdateTask(id int, description string) (models.Task, er
 func (r *taskRepository) DeleteTask(taskId int) (models.Task, error) {
 	tasks, err := r.GetTasks()
 	if err != nil {
-		fmt.Println(err)
-		return models.Task{}, err
+		return models.Task{}, fmt.Errorf("unable to get tasks: %w", err)
 	}
 
 	task, err := r.GetTask(taskId)
 	if err != nil {
 		fmt.Println(err)
-		return models.Task{}, err
+		return models.Task{}, fmt.Errorf("task with id %d not found", taskId)
 	}
 	
 	id := task.Id
