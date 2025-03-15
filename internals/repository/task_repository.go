@@ -27,7 +27,7 @@ func (r *taskRepository) GetTasks(filterStatus string) ([]models.Task, error) {
 	stream, err := utils.ReadFromJSON(r.sourceFile)
 
 	if err != nil {
-		return []models.Task{}, err
+		return []models.Task{}, nil
 	}
 
 	tasks, err := utils.DeserializeFromJSON[[]models.Task](stream)
@@ -65,11 +65,18 @@ func (r *taskRepository) GetTask(id int) (*models.Task, error) {
 func (r *taskRepository) newTask(description string) (models.Task) {
 	tasks, err := r.GetTasks("all")
 	if err != nil {
-		fmt.Println(err)
 		return models.Task{}
 	}
-	prevTask := tasks[len(tasks)-1]
-	id := prevTask.Id + 1
+
+	var id int
+
+	if len(tasks) == 0 {
+		id = 1
+	} else {
+		prevTask := tasks[len(tasks)-1]
+		id = prevTask.Id + 1	
+	}
+
 	task := models.Task{Id: id, Description: description, Status: "todo", CreatedAt: time.Now(), UpdatedAt: time.Now()}
 
 	return task
@@ -77,9 +84,11 @@ func (r *taskRepository) newTask(description string) (models.Task) {
 
 func (r *taskRepository) CreateTask(description string) (*models.Task, error) {
 	tasks, err := r.GetTasks("all")
+
 	if err != nil {
 		return nil, fmt.Errorf("unable to get tasks: %w", err)
 	}
+
 	task := r.newTask(description)
 	tasks = append(tasks, task)
 
@@ -132,7 +141,6 @@ func (r *taskRepository) DeleteTask(taskId int) (models.Task, error) {
 
 	task, err := r.GetTask(taskId)
 	if err != nil {
-		fmt.Println(err)
 		return models.Task{}, fmt.Errorf("task with id %d not found", taskId)
 	}
 	
