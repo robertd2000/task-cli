@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/robertd2000/task-cli/internals/repository"
 	"github.com/robertd2000/task-cli/internals/service"
@@ -29,7 +30,22 @@ func main() {
 
 		taskService.CreateTask(description)
 	case "update":
-		fmt.Println("Update task")
+		if len(args) < 2 {
+			fmt.Println("No id provided")
+			return
+		}
+
+		if len(args) < 3 {
+			fmt.Println("No description provided")
+			return
+		}
+
+		idStr, description := args[1], args[2]
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			fmt.Errorf("invalid id: %w", err)
+		}
+		taskService.UpdateTask(id, description)
 	case "delete":
 		fmt.Println("Delete task")
 	case "list":
@@ -42,8 +58,4 @@ func main() {
 		fmt.Println("Invalid operation")
 		return
 	}
-
-
-	// taskService.CreateTask("test 7")
-	taskService.UpdateTask(0, "test 0")
 }
