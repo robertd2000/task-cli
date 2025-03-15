@@ -27,15 +27,13 @@ func (r *taskRepository) GetTasks() ([]models.Task, error) {
 	stream, err := utils.ReadFromJSON(r.sourceFile)
 
 	if err != nil {
-		fmt.Println(err)
-		return nil, err
+		return []models.Task{}, err
 	}
 
 	tasks, err := utils.DeserializeFromJSON[[]models.Task](stream)
 
 	if err != nil {
-		fmt.Println(err)
-		return nil, err
+		return nil, fmt.Errorf("unable to deserialize tasks: %w", err)
 	}
 
 	return tasks, nil
@@ -44,7 +42,7 @@ func (r *taskRepository) GetTasks() ([]models.Task, error) {
 func (r *taskRepository) GetTask(id int) (*models.Task, error) {
 	tasks, err := r.GetTasks()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("unable to get tasks: %w", err)
 	}
 
 	for i := range tasks {
@@ -72,8 +70,7 @@ func (r *taskRepository) newTask(description string) (models.Task) {
 func (r *taskRepository) CreateTask(description string) (*models.Task, error) {
 	tasks, err := r.GetTasks()
 	if err != nil {
-		fmt.Println(err)
-		return nil, err
+		return nil, fmt.Errorf("unable to get tasks: %w", err)
 	}
 	task := r.newTask(description)
 	tasks = append(tasks, task)
@@ -86,8 +83,7 @@ func (r *taskRepository) CreateTask(description string) (*models.Task, error) {
 func (r *taskRepository) UpdateTask(id int, description string) (models.Task, error) {
 	tasks, err := r.GetTasks()
 	if err != nil {
-		fmt.Println(err)
-		return models.Task{}, err
+		return models.Task{}, fmt.Errorf("unable to get tasks: %w", err)
 	}
 
 	if tasks == nil {
@@ -118,14 +114,13 @@ func (r *taskRepository) UpdateTask(id int, description string) (models.Task, er
 func (r *taskRepository) DeleteTask(taskId int) (models.Task, error) {
 	tasks, err := r.GetTasks()
 	if err != nil {
-		fmt.Println(err)
-		return models.Task{}, err
+		return models.Task{}, fmt.Errorf("unable to get tasks: %w", err)
 	}
 
 	task, err := r.GetTask(taskId)
 	if err != nil {
 		fmt.Println(err)
-		return models.Task{}, err
+		return models.Task{}, fmt.Errorf("task with id %d not found", taskId)
 	}
 	
 	id := task.Id
