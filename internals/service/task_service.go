@@ -26,7 +26,7 @@ func (s *taskService) GetTask(id int) (*models.Task, error) {
 }
 
 func (s *taskService) GetTasks() ([]models.Task, error) {
-	return s.repository.GetTasks()
+	return s.repository.GetTasks("all")
 }
 
 func (s *taskService) CreateTask(description string) (*models.Task, error){

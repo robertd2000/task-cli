@@ -9,7 +9,7 @@ import (
 )
 
 type TaskRepository interface {
-	GetTasks() ([]models.Task, error)
+	GetTasks(filter string) ([]models.Task, error)
 	GetTask(id int) (*models.Task, error)
 	CreateTask(description string) (*models.Task, error)
 	UpdateTask(id int, update *models.Task) (models.Task, error)
@@ -23,7 +23,7 @@ func NewTaskRepository(sourceFile string) TaskRepository {
 	return &taskRepository{sourceFile: sourceFile}
 }
 
-func (r *taskRepository) GetTasks() ([]models.Task, error) {
+func (r *taskRepository) GetTasks(filters string) ([]models.Task, error) {
 	stream, err := utils.ReadFromJSON(r.sourceFile)
 
 	if err != nil {
@@ -36,11 +36,23 @@ func (r *taskRepository) GetTasks() ([]models.Task, error) {
 		return nil, fmt.Errorf("unable to deserialize tasks: %w", err)
 	}
 
+	if filters == "done" {
+		tasks = utils.Filter(tasks, func(task models.Task) bool {
+			return task.Status == "done"
+		})
+	}
+
+	if filters == "in-progress" {
+		tasks = utils.Filter(tasks, func(task models.Task) bool {
+			return task.Status == "done"
+		})
+	}
+
 	return tasks, nil
 }
 
 func (r *taskRepository) GetTask(id int) (*models.Task, error) {
-	tasks, err := r.GetTasks()
+	tasks, err := r.GetTasks("all")
 	if err != nil {
 		return nil, fmt.Errorf("unable to get tasks: %w", err)
 	}
@@ -55,7 +67,7 @@ func (r *taskRepository) GetTask(id int) (*models.Task, error) {
 }
 
 func (r *taskRepository) newTask(description string) (models.Task) {
-	tasks, err := r.GetTasks()
+	tasks, err := r.GetTasks("all")
 	if err != nil {
 		fmt.Println(err)
 		return models.Task{}
@@ -68,7 +80,7 @@ func (r *taskRepository) newTask(description string) (models.Task) {
 }
 
 func (r *taskRepository) CreateTask(description string) (*models.Task, error) {
-	tasks, err := r.GetTasks()
+	tasks, err := r.GetTasks("all")
 	if err != nil {
 		return nil, fmt.Errorf("unable to get tasks: %w", err)
 	}
@@ -81,7 +93,7 @@ func (r *taskRepository) CreateTask(description string) (*models.Task, error) {
 }
 
 func (r *taskRepository) UpdateTask(id int, update *models.Task) (models.Task, error) {
-	tasks, err := r.GetTasks()
+	tasks, err := r.GetTasks("all")
 	if err != nil {
 		return models.Task{}, fmt.Errorf("unable to get tasks: %w", err)
 	}
@@ -117,7 +129,7 @@ func (r *taskRepository) UpdateTask(id int, update *models.Task) (models.Task, e
 }
 
 func (r *taskRepository) DeleteTask(taskId int) (models.Task, error) {
-	tasks, err := r.GetTasks()
+	tasks, err := r.GetTasks("all")
 	if err != nil {
 		return models.Task{}, fmt.Errorf("unable to get tasks: %w", err)
 	}
