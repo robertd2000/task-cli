@@ -12,7 +12,7 @@ type TaskRepository interface {
 	GetTasks() ([]models.Task, error)
 	GetTask(id int) (*models.Task, error)
 	CreateTask(description string) (*models.Task, error)
-	UpdateTask(id int, description string) (models.Task, error)
+	UpdateTask(id int, update *models.Task) (models.Task, error)
 	DeleteTask(id int) (models.Task, error)
 }
 
@@ -80,7 +80,7 @@ func (r *taskRepository) CreateTask(description string) (*models.Task, error) {
 	return &task, nil
 }
 
-func (r *taskRepository) UpdateTask(id int, description string) (models.Task, error) {
+func (r *taskRepository) UpdateTask(id int, update *models.Task) (models.Task, error) {
 	tasks, err := r.GetTasks()
 	if err != nil {
 		return models.Task{}, fmt.Errorf("unable to get tasks: %w", err)
@@ -93,7 +93,12 @@ func (r *taskRepository) UpdateTask(id int, description string) (models.Task, er
 	var task *models.Task
 	for i := range tasks {
 		if tasks[i].Id == id {
-			tasks[i].Description = description
+			if update.Description != "" {
+                tasks[i].Description = update.Description
+            }
+            if update.Status != "" {
+                tasks[i].Status = update.Status
+            }
 			tasks[i].UpdatedAt = time.Now()
 			task = &tasks[i]
 			break
