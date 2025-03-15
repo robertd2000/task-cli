@@ -21,13 +21,6 @@
     "updatedAt": "2025-03-14T18:09:19.9335142+03:00"
   },
   {
-    "id": 6,
-    "description": "test 42",
-    "status": "todo",
-    "createdAt": "2025-03-14T22:20:29.2756993+03:00",
-    "updatedAt": "2025-03-14T22:20:29.2756993+03:00"
-  },
-  {
     "id": 7,
     "description": "test 45",
     "status": "todo",

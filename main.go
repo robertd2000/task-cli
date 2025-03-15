@@ -45,9 +45,20 @@ func main() {
 		if err != nil {
 			fmt.Errorf("invalid id: %w", err)
 		}
+		
 		taskService.UpdateTask(id, description)
 	case "delete":
-		fmt.Println("Delete task")
+		if len(args) < 2 {
+			fmt.Println("No id provided")
+			return
+		}
+		idStr := args[1]
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			fmt.Errorf("invalid id: %w", err)
+		}
+
+		taskService.DeleteTask(id)
 	case "list":
 		fmt.Println("Get task")
 	case "mark-in-progress":
