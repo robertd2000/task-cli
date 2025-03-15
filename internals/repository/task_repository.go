@@ -36,6 +36,13 @@ func (r *taskRepository) GetTasks(filterStatus string) ([]models.Task, error) {
 		return nil, fmt.Errorf("unable to deserialize tasks: %w", err)
 	}
 
+	
+	if filterStatus == "todo" {
+		tasks = utils.Filter(tasks, func(task models.Task) bool {
+			return task.Status == "todo"
+		})
+	}
+
 	if filterStatus == "done" {
 		tasks = utils.Filter(tasks, func(task models.Task) bool {
 			return task.Status == "done"
@@ -44,7 +51,7 @@ func (r *taskRepository) GetTasks(filterStatus string) ([]models.Task, error) {
 
 	if filterStatus == "in-progress" {
 		tasks = utils.Filter(tasks, func(task models.Task) bool {
-			return task.Status == "done"
+			return task.Status == "in-progress"
 		})
 	}
 
