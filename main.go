@@ -61,6 +61,8 @@ func main() {
 		}
 
 		taskService.DeleteTask(id)
+
+		fmt.Printf("Task with id %d deleted\n", id)
 	case "list":
 		if len(args) < 1 {
 			fmt.Println("No id provided")
