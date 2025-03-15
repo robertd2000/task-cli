@@ -27,12 +27,14 @@ func (r *taskRepository) GetTasks() ([]models.Task, error) {
 	stream, err := utils.ReadFromJSON(r.sourceFile)
 
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 
 	tasks, err := utils.DeserializeFromJSON[[]models.Task](stream)
 
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 
@@ -44,7 +46,7 @@ func (r *taskRepository) GetTask(id int) (*models.Task, error) {
 	if err != nil {
 		return nil, err
 	}
-	
+
 	for i := range tasks {
 		if tasks[i].Id == id {
 			return &tasks[i], nil
@@ -57,6 +59,7 @@ func (r *taskRepository) GetTask(id int) (*models.Task, error) {
 func (r *taskRepository) newTask(description string) (models.Task) {
 	tasks, err := r.GetTasks()
 	if err != nil {
+		fmt.Println(err)
 		return models.Task{}
 	}
 	prevTask := tasks[len(tasks)-1]
@@ -69,6 +72,7 @@ func (r *taskRepository) newTask(description string) (models.Task) {
 func (r *taskRepository) CreateTask(description string) (*models.Task, error) {
 	tasks, err := r.GetTasks()
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 	task := r.newTask(description)
@@ -82,6 +86,7 @@ func (r *taskRepository) CreateTask(description string) (*models.Task, error) {
 func (r *taskRepository) UpdateTask(id int, description string) (models.Task, error) {
 	tasks, err := r.GetTasks()
 	if err != nil {
+		fmt.Println(err)
 		return models.Task{}, err
 	}
 
@@ -113,11 +118,13 @@ func (r *taskRepository) UpdateTask(id int, description string) (models.Task, er
 func (r *taskRepository) DeleteTask(taskId int) (models.Task, error) {
 	tasks, err := r.GetTasks()
 	if err != nil {
+		fmt.Println(err)
 		return models.Task{}, err
 	}
 
 	task, err := r.GetTask(taskId)
 	if err != nil {
+		fmt.Println(err)
 		return models.Task{}, err
 	}
 	
