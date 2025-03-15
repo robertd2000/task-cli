@@ -57,14 +57,15 @@ func (r *TaskRepository) newTask(description string) (models.Task) {
 	return task
 }
 
-func (r *TaskRepository) CreateTask(description string) (*models.Task) {
+func (r *TaskRepository) CreateTask(description string) (*models.Task, error) {
+	fmt.Println(description)
 	tasks := r.GetTasks()
 	task := r.newTask(description)
 	tasks = append(tasks, task)
 
 	r.commit(tasks)
 
-	return &task
+	return &task, nil
 }
 
 func (r *TaskRepository) UpdateTask(id int, description string) (models.Task, error) {
