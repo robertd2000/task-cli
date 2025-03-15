@@ -69,7 +69,6 @@ func main() {
 			return
 		}
 
-
 		idStr := args[1]
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
@@ -78,7 +77,18 @@ func main() {
 		
 		taskService.UpdateTask(id,  &models.Task{Status: "in-progress"})
 	case "mark-done":
-		fmt.Println("Get task")
+		if len(args) < 2 {
+			fmt.Println("No id provided")
+			return
+		}
+
+		idStr := args[1]
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			log.Fatal("invalid id: %w", err)
+		}
+		
+		taskService.UpdateTask(id,  &models.Task{Status: "done"})
 	default:
 		fmt.Println("Invalid operation")
 		return
