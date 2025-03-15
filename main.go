@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 
+	"github.com/robertd2000/task-cli/internals/models"
 	"github.com/robertd2000/task-cli/internals/repository"
 	"github.com/robertd2000/task-cli/internals/service"
 )
@@ -43,26 +45,38 @@ func main() {
 		idStr, description := args[1], args[2]
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
-			fmt.Errorf("invalid id: %w", err)
+			log.Fatal("invalid id: %w", err)
 		}
 		
-		taskService.UpdateTask(id, description)
+		taskService.UpdateTask(id,  &models.Task{Description: description})
 	case "delete":
 		if len(args) < 2 {
-			fmt.Println("No id provided")
+			log.Fatal("No id provided")
 			return
 		}
 		idStr := args[1]
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
-			fmt.Errorf("invalid id: %w", err)
+			log.Fatal("invalid id: %w", err)
 		}
 
 		taskService.DeleteTask(id)
 	case "list":
 		fmt.Println("Get task")
 	case "mark-in-progress":
-		fmt.Println("Get task")
+		if len(args) < 2 {
+			fmt.Println("No id provided")
+			return
+		}
+
+
+		idStr := args[1]
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			log.Fatal("invalid id: %w", err)
+		}
+		
+		taskService.UpdateTask(id,  &models.Task{Status: "in-progress"})
 	case "mark-done":
 		fmt.Println("Get task")
 	default:
