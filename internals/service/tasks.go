@@ -5,16 +5,17 @@ import (
 	"time"
 
 	"github.com/robertd2000/task-cli/internals/models"
+	"github.com/robertd2000/task-cli/internals/utils"
 )
 
 func GetTasks() []models.Task {
-	stream, err := ReadFromJSON("db.json")
+	stream, err := utils.ReadFromJSON("db.json")
 
 	if err != nil {
 		fmt.Printf("unable to read from json: %v", err)
 	}
 
-	tasks, err := DeserializeFromJSON[[]models.Task](stream)
+	tasks, err := utils.DeserializeFromJSON[[]models.Task](stream)
 
 	if err != nil {
 		fmt.Printf("unable to deserialize task: %v", err)
@@ -100,12 +101,12 @@ func DeleteTask(taskId int) (models.Task) {
 }
 
 func commit(tasks []models.Task) error {
-	s, err := SerializeToJSON(tasks)
+	s, err := utils.SerializeToJSON(tasks)
 	if err != nil {
 		return fmt.Errorf("unable to serialize task: %w", err)
 	}
 
-	if err := SaveToJSON("db.json", s); err != nil {
+	if err := utils.SaveToJSON("db.json", s); err != nil {
 		return fmt.Errorf("unable to save to JSON: %w", err)
 	}
 
