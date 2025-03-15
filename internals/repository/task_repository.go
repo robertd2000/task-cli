@@ -9,7 +9,7 @@ import (
 )
 
 type TaskRepository interface {
-	GetTasks(filter string) ([]models.Task, error)
+	GetTasks(filterStatus string) ([]models.Task, error)
 	GetTask(id int) (*models.Task, error)
 	CreateTask(description string) (*models.Task, error)
 	UpdateTask(id int, update *models.Task) (models.Task, error)
@@ -23,7 +23,7 @@ func NewTaskRepository(sourceFile string) TaskRepository {
 	return &taskRepository{sourceFile: sourceFile}
 }
 
-func (r *taskRepository) GetTasks(filters string) ([]models.Task, error) {
+func (r *taskRepository) GetTasks(filterStatus string) ([]models.Task, error) {
 	stream, err := utils.ReadFromJSON(r.sourceFile)
 
 	if err != nil {
@@ -36,13 +36,13 @@ func (r *taskRepository) GetTasks(filters string) ([]models.Task, error) {
 		return nil, fmt.Errorf("unable to deserialize tasks: %w", err)
 	}
 
-	if filters == "done" {
+	if filterStatus == "done" {
 		tasks = utils.Filter(tasks, func(task models.Task) bool {
 			return task.Status == "done"
 		})
 	}
 
-	if filters == "in-progress" {
+	if filterStatus == "in-progress" {
 		tasks = utils.Filter(tasks, func(task models.Task) bool {
 			return task.Status == "done"
 		})
