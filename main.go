@@ -73,8 +73,6 @@ func main() {
 		if (len(args) == 2) {
 			filterStatus := args[1]
 
-			fmt.Printf("Filtering by status: %s\n", filterStatus)
-
 			tasks, err = taskService.GetTasks(filterStatus)
 			if err != nil {
 				log.Fatal("unable to get tasks: %w", err)
