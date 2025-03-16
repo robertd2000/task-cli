@@ -8,7 +8,6 @@ import (
 
 func DisplayTasks(tasks []models.Task) {
 	for _, task := range tasks {
-		fmt.Printf("ID: %d, Description: %s, Status: %s, CreatedAt: %s, UpdatedAt: %s\n",
-			task.Id, task.Description, task.Status, task.CreatedAt, task.UpdatedAt)
+		fmt.Printf("%s\n", task.Display())
 	}
 }
