@@ -34,5 +34,8 @@ func CLI(taskService service.TaskService) {
 		commands.ChangeStatus(args, "in-progress")
 	case "mark-todo":
 		commands.ChangeStatus(args, "todo")
+	default:
+		fmt.Println("Invalid operation")
+		return
 	}
 }
