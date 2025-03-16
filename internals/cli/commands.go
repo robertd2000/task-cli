@@ -95,3 +95,20 @@ func (c *Commands) List(args []string) {
 		fmt.Printf("ID: %d, Description: %s, Status: %s, CreatedAt: %s, UpdatedAt: %s\n", task.Id, task.Description, task.Status, task.CreatedAt, task.UpdatedAt)
 	}
 }
+
+func (c *Commands) ChangeStatus(args []string, status string) {
+	if len(args) < 2 {
+		fmt.Println("No id provided")
+		return
+	}
+
+	idStr := args[1]
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		log.Fatal("invalid id: %w", err)
+	}
+	
+	c.taskService.UpdateTask(id,  &models.Task{Status: status})
+
+	fmt.Printf("Task with id %d updated\n", id)
+}
