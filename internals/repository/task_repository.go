@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"time"
 
+	"slices"
+
 	"github.com/robertd2000/task-cli/internals/models"
 	"github.com/robertd2000/task-cli/internals/utils"
 )
@@ -62,24 +64,22 @@ func (r *taskRepository) GetTask(id int) (*models.Task, error) {
 	return nil, fmt.Errorf("task with id %d not found", id)
 }
 
-func (r *taskRepository) newTask(description string) (models.Task) {
+func (r *taskRepository) newTask(description string) models.Task {
 	tasks, err := r.GetTasks("all")
 	if err != nil {
 		return models.Task{}
 	}
 
-	var id int
+	var nextID int
 
 	if len(tasks) == 0 {
-		id = 1
+		nextID = 1
 	} else {
-		prevTask := tasks[len(tasks)-1]
-		id = prevTask.Id + 1	
+		previousTask := tasks[len(tasks)-1]
+		nextID = previousTask.Id + 1
 	}
 
-	task := models.Task{Id: id, Description: description, Status: "todo", CreatedAt: time.Now(), UpdatedAt: time.Now()}
-
-	return task
+	return *models.NewTask(nextID, description, "todo", time.Now(), time.Now())
 }
 
 func (r *taskRepository) CreateTask(description string) (*models.Task, error) {
@@ -148,7 +148,7 @@ func (r *taskRepository) DeleteTask(taskId int) (models.Task, error) {
 
 	for i, task := range tasks {
 		if task.Id == id {
-			tasks = append(tasks[:i], tasks[i+1:]...)
+			tasks = slices.Delete(tasks, i, i+1)
 		}
 	}
 	
