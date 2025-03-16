@@ -10,6 +10,10 @@ type Commands struct{
 	taskService service.TaskService
 }
 
+func NewCommands(taskService service.TaskService) *Commands {
+	return &Commands{taskService: taskService}
+}
+
 func (c *Commands) Add(args []string) {
 	if len(args) < 2 {
 		fmt.Println("No description provided")
