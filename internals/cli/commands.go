@@ -39,15 +39,7 @@ func (c *Commands) Update(args []string) {
 }
 
 func (c *Commands) Delete(args []string) {
-	if len(args) < 2 {
-		log.Fatal("No id provided")
-		return
-	}
-	idStr := args[1]
-	id, err := strconv.Atoi(idStr)
-	if err != nil {
-		log.Fatal("invalid id: %w", err)
-	}
+	id := utils.GetId(args, 1)
 
 	c.taskService.DeleteTask(id)
 
