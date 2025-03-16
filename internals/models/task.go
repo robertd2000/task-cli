@@ -13,3 +13,13 @@ type Task struct {
 func NewTask(id int, description string, status string, createdAt time.Time, updatedAt time.Time) *Task {
 	return &Task{Id: id, Description: description, Status: status, CreatedAt: createdAt, UpdatedAt: updatedAt}
 }
+
+func (task Task) Display() string {
+	return "Task{" +
+		"id=" + string(task.Id) +
+		", description=" + task.Description +
+		", status=" + task.Status +
+		", createdAt=" + task.CreatedAt.String() +
+		", updatedAt=" + task.UpdatedAt.String() +
+		"}"
+}
