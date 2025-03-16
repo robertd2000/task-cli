@@ -1,6 +1,9 @@
 package models
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 type Task struct {
 	Id          int 		`json:"id"`
@@ -16,7 +19,7 @@ func NewTask(id int, description string, status string, createdAt time.Time, upd
 
 func (task Task) Display() string {
 	return "Task{" +
-		"id=" + string(task.Id) +
+		"id=" + fmt.Sprint(task.Id) +
 		", description=" + task.Description +
 		", status=" + task.Status +
 		", createdAt=" + task.CreatedAt.String() +
