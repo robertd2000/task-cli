@@ -46,30 +46,26 @@ func (c *Commands) Delete(args []string) {
 }
 
 func (c *Commands) List(args []string) {
-	if len(args) < 1 {
-		fmt.Println("No id provided")
+	var filterStatus string
+
+	switch len(args) {
+	case 1:
+		filterStatus = "all"
+	case 2:
+		filterStatus = args[1]
+	default:
+		fmt.Println("Invalid arguments")
 		return
 	}
 
-	var tasks []models.Task
-	var err error
-
-	if (len(args) == 2) {
-		filterStatus := args[1]
-
-		tasks, err = c.taskService.GetTasks(filterStatus)
-		if err != nil {
-			log.Fatal("unable to get tasks: %w", err)
-		}
-	} else {
-		tasks, err = c.taskService.GetTasks("all")
-		if err != nil {
-			log.Fatal("unable to get tasks: %w", err)
-		}
+	tasks, err := c.taskService.GetTasks(filterStatus)
+	if err != nil {
+		log.Fatalf("unable to get tasks: %v", err)
 	}
 
 	for _, task := range tasks {
-		fmt.Printf("ID: %d, Description: %s, Status: %s, CreatedAt: %s, UpdatedAt: %s\n", task.Id, task.Description, task.Status, task.CreatedAt, task.UpdatedAt)
+		fmt.Printf("ID: %d, Description: %s, Status: %s, CreatedAt: %s, UpdatedAt: %s\n",
+			task.Id, task.Description, task.Status, task.CreatedAt, task.UpdatedAt)
 	}
 }
 
