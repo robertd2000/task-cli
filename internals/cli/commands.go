@@ -7,6 +7,7 @@ import (
 
 	"github.com/robertd2000/task-cli/internals/models"
 	"github.com/robertd2000/task-cli/internals/service"
+	"github.com/robertd2000/task-cli/internals/utils"
 )
 
 type Commands struct{
@@ -18,12 +19,7 @@ func NewCommands(taskService service.TaskService) *Commands {
 }
 
 func (c *Commands) Add(args []string) {
-	if len(args) < 2 {
-		fmt.Println("No description provided")
-		return
-	}
-
-	description := args[1]
+	description := utils.GetDescription(args, 1)
 
 	_, err := c.taskService.CreateTask(description)
 	if err != nil {
@@ -44,6 +40,8 @@ func (c *Commands) Update(args []string) {
 		return
 	}
 
+	description := utils.GetDescription(args, 2)
+	
 	idStr, description := args[1], args[2]
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
