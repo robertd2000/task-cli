@@ -2,7 +2,10 @@ package cli
 
 import (
 	"fmt"
+	"log"
+	"strconv"
 
+	"github.com/robertd2000/task-cli/internals/models"
 	"github.com/robertd2000/task-cli/internals/service"
 )
 
@@ -25,4 +28,26 @@ func (c *Commands) Add(args []string) {
 	c.taskService.CreateTask(description)
 
 	fmt.Println("Task created")
+}
+
+func (c *Commands) Update(args []string) {
+	if len(args) < 2 {
+		fmt.Println("No id provided")
+		return
+	}
+
+	if len(args) < 3 {
+		fmt.Println("No description provided")
+		return
+	}
+
+	idStr, description := args[1], args[2]
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		log.Fatal("invalid id: %w", err)
+	}
+	
+	c.taskService.UpdateTask(id,  &models.Task{Description: description})
+
+	fmt.Printf("Task with id %d updated\n", id)
 }
