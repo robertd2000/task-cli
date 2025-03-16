@@ -63,10 +63,7 @@ func (c *Commands) List(args []string) {
 		log.Fatalf("unable to get tasks: %v", err)
 	}
 
-	for _, task := range tasks {
-		fmt.Printf("ID: %d, Description: %s, Status: %s, CreatedAt: %s, UpdatedAt: %s\n",
-			task.Id, task.Description, task.Status, task.CreatedAt, task.UpdatedAt)
-	}
+	DisplayTasks(tasks)
 }
 
 func (c *Commands) ChangeStatus(args []string, status string) {
