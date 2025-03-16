@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"time"
 
+	"slices"
+
 	"github.com/robertd2000/task-cli/internals/models"
 	"github.com/robertd2000/task-cli/internals/utils"
 )
@@ -146,7 +148,7 @@ func (r *taskRepository) DeleteTask(taskId int) (models.Task, error) {
 
 	for i, task := range tasks {
 		if task.Id == id {
-			tasks = append(tasks[:i], tasks[i+1:]...)
+			tasks = slices.Delete(tasks, i, i+1)
 		}
 	}
 	
