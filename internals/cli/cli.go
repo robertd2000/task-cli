@@ -8,18 +8,15 @@ import (
 )
 
 func CLI(taskService service.TaskService) {
-	commands := NewCommands(taskService)
-
 	args := os.Args[1:]
 
 	if len(args) == 0 {
 		fmt.Println("No arguments provided")
 		return
 	}
+	commands := NewCommands(taskService)
 
-	command := args[0]
-
-	switch command {
+	switch command := args[0]; command {
 	case "add":
 		commands.Add(args)
 	case "update":
