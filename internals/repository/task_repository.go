@@ -77,9 +77,9 @@ func (r *taskRepository) newTask(description string) (models.Task) {
 		id = prevTask.Id + 1	
 	}
 
-	task := models.Task{Id: id, Description: description, Status: "todo", CreatedAt: time.Now(), UpdatedAt: time.Now()}
+	task :=  models.NewTask(id, description, "todo", time.Now(), time.Now()) //models.Task{Id: id, Description: description, Status: "todo", CreatedAt: time.Now(), UpdatedAt: time.Now()}
 
-	return task
+	return *task
 }
 
 func (r *taskRepository) CreateTask(description string) (*models.Task, error) {
