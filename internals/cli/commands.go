@@ -51,3 +51,19 @@ func (c *Commands) Update(args []string) {
 
 	fmt.Printf("Task with id %d updated\n", id)
 }
+
+func (c *Commands) Delete(args []string) {
+	if len(args) < 2 {
+		log.Fatal("No id provided")
+		return
+	}
+	idStr := args[1]
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		log.Fatal("invalid id: %w", err)
+	}
+
+	c.taskService.DeleteTask(id)
+
+	fmt.Printf("Task with id %d deleted\n", id)
+}
