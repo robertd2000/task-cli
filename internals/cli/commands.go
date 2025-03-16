@@ -25,9 +25,12 @@ func (c *Commands) Add(args []string) {
 
 	description := args[1]
 
-	c.taskService.CreateTask(description)
+	_, err := c.taskService.CreateTask(description)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	fmt.Println("Task created")
+	fmt.Printf("Task with description %s created\n", description)
 }
 
 func (c *Commands) Update(args []string) {
