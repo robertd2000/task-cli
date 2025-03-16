@@ -22,7 +22,7 @@ func (task Task) Display() string {
 		"id=" + fmt.Sprint(task.Id) +
 		", description=" + task.Description +
 		", status=" + task.Status +
-		", createdAt=" + task.CreatedAt.String() +
-		", updatedAt=" + task.UpdatedAt.String() +
+		", createdAt=" + task.CreatedAt.Format("02.01.2006 15:04:05") +
+		", updatedAt=" + task.UpdatedAt.Format("02.01.2006 15:04:05") +
 		"}"
 }
