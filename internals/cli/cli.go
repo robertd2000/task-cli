@@ -28,11 +28,11 @@ func CLI(taskService service.TaskService) {
 		commands.Delete(args)
 	case "list":
 		commands.List(args)
-	case "done":
+	case "mark-done":
 		commands.ChangeStatus(args, "done")
-	case "in-progress":
+	case "mark-in-progress":
 		commands.ChangeStatus(args, "in-progress")
-	case "todo":
+	case "mark-todo":
 		commands.ChangeStatus(args, "todo")
 	}
 }
