@@ -30,23 +30,8 @@ func (c *Commands) Add(args []string) {
 }
 
 func (c *Commands) Update(args []string) {
-	if len(args) < 2 {
-		fmt.Println("No id provided")
-		return
-	}
-
-	if len(args) < 3 {
-		fmt.Println("No description provided")
-		return
-	}
-
+	id := utils.GetId(args, 1)
 	description := utils.GetDescription(args, 2)
-	
-	idStr, description := args[1], args[2]
-	id, err := strconv.Atoi(idStr)
-	if err != nil {
-		log.Fatal("invalid id: %w", err)
-	}
 	
 	c.taskService.UpdateTask(id,  &models.Task{Description: description})
 
