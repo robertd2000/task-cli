@@ -62,24 +62,22 @@ func (r *taskRepository) GetTask(id int) (*models.Task, error) {
 	return nil, fmt.Errorf("task with id %d not found", id)
 }
 
-func (r *taskRepository) newTask(description string) (models.Task) {
+func (r *taskRepository) newTask(description string) models.Task {
 	tasks, err := r.GetTasks("all")
 	if err != nil {
 		return models.Task{}
 	}
 
-	var id int
+	var nextID int
 
 	if len(tasks) == 0 {
-		id = 1
+		nextID = 1
 	} else {
-		prevTask := tasks[len(tasks)-1]
-		id = prevTask.Id + 1	
+		previousTask := tasks[len(tasks)-1]
+		nextID = previousTask.Id + 1
 	}
 
-	task :=  models.NewTask(id, description, "todo", time.Now(), time.Now()) //models.Task{Id: id, Description: description, Status: "todo", CreatedAt: time.Now(), UpdatedAt: time.Now()}
-
-	return *task
+	return *models.NewTask(nextID, description, "todo", time.Now(), time.Now())
 }
 
 func (r *taskRepository) CreateTask(description string) (*models.Task, error) {
