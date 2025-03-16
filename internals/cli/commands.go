@@ -3,7 +3,6 @@ package cli
 import (
 	"fmt"
 	"log"
-	"strconv"
 
 	"github.com/robertd2000/task-cli/internals/models"
 	"github.com/robertd2000/task-cli/internals/service"
@@ -75,16 +74,7 @@ func (c *Commands) List(args []string) {
 }
 
 func (c *Commands) ChangeStatus(args []string, status string) {
-	if len(args) < 2 {
-		fmt.Println("No id provided")
-		return
-	}
-
-	idStr := args[1]
-	id, err := strconv.Atoi(idStr)
-	if err != nil {
-		log.Fatal("invalid id: %w", err)
-	}
+	id := utils.GetId(args, 1)
 	
 	c.taskService.UpdateTask(id,  &models.Task{Status: status})
 
