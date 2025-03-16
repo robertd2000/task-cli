@@ -8,7 +8,7 @@ Clone the repository and run the following command:
 
 ```bash
 git clone https://github.com/robertd2000/task-cli.git
-cd backend-projects/task-tracker
+cd task-cli
 ```
 
 Run the following command to build and run the project:
