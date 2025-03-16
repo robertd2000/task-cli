@@ -9,3 +9,7 @@ type Task struct {
 	CreatedAt   time.Time 	`json:"createdAt"`
 	UpdatedAt  	time.Time 	`json:"updatedAt"`
 }
+
+func NewTask(id int, description string, status string, createdAt time.Time, updatedAt time.Time) *Task {
+	return &Task{Id: id, Description: description, Status: status, CreatedAt: createdAt, UpdatedAt: updatedAt}
+}
